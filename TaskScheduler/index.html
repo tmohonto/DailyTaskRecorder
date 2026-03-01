@@ -21,6 +21,9 @@
             <button data-view="monthly">Monthly</button>
             <button data-view="yearly">Yearly</button>
         </nav>
+        <div style="margin-top: 1rem;">
+            <button id="export-excel-btn" class="export-btn" style="background: #10b981; color: white; padding: 0.5rem 1rem; border: none; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: background 0.3s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">📊 Export to Excel</button>
+        </div>
     </header>
     <main class="main-content">
         <section class="daily-table-section">
@@ -43,6 +46,8 @@
     <footer class="footer">
         <p>© 2026 Premium Scheduler – built with love.</p>
     </footer>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="app.js"></script>
 </body>
 

@@ -1,15 +1,69 @@
 // Premium Scheduler with Daily, Monthly, Yearly tabs (9 AM‑5 PM, one task per hour per day)
-// Data stored in localStorage under "premium_task_scheduler_tasks"
+// Data stored in Firebase (with localStorage fallback)
 
 const TASK_STORAGE_KEY = "premium_task_scheduler_tasks";
 
-// ---------- Data handling ----------
-function loadTasks() {
-  const raw = localStorage.getItem(TASK_STORAGE_KEY);
-  return raw ? JSON.parse(raw) : [];
+// *** REPLACE THIS WITH YOUR OWN FIREBASE CONFIG ***
+const firebaseConfig = {
+  apiKey: "AIzaSyDtA5ZnbDkkPEr_3fyWh2OgSGbfJnUz47Q",
+  authDomain: "taskscheduler-1a1d8.firebaseapp.com",
+  databaseURL: "https://taskscheduler-1a1d8-default-rtdb.firebaseio.com",
+  projectId: "taskscheduler-1a1d8",
+  storageBucket: "taskscheduler-1a1d8.firebasestorage.app",
+  messagingSenderId: "955512830230",
+  appId: "1:955512830230:web:2cf8a1fa7a1e8bff5c3837",
+  measurementId: "G-Z34ZB739E0"
+};
+
+let db = null;
+try {
+  if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+  }
+} catch (e) {
+  console.warn("Firebase not setup correctly yet. Waiting for keys.", e);
 }
+
+// ---------- Data handling ----------
+let appTasks = [];
+
+async function initData() {
+  if (db) {
+    try {
+      const snapshot = await db.ref('scheduler_tasks').once('value');
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        appTasks = Array.isArray(data) ? data : Object.values(data);
+      } else {
+        appTasks = [];
+      }
+    } catch (e) {
+      console.error("Failed to load from Firebase. Using local DB.", e);
+      fallbackLoad();
+    }
+  } else {
+    fallbackLoad();
+  }
+}
+
+function fallbackLoad() {
+  const raw = localStorage.getItem(TASK_STORAGE_KEY);
+  appTasks = raw ? JSON.parse(raw) : [];
+}
+
+function loadTasks() {
+  return appTasks;
+}
+
 function saveTasks(tasks) {
-  localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(tasks));
+  appTasks = tasks;
+  localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(tasks)); // Keep local backup
+  if (db) {
+    db.ref('scheduler_tasks').set(tasks).catch(e => {
+      console.error("Firebase save failed", e);
+    });
+  }
 }
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
@@ -359,13 +413,48 @@ function setupViewSwitcher() {
   });
 }
 
+// ---------- Export Setup ----------
+function setupExport() {
+  const btn = document.getElementById('export-excel-btn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const tasks = loadTasks();
+      if (tasks.length === 0) {
+        alert("No data to export!");
+        return;
+      }
+      let csv = "Date,Hour,Task,Working Hours\n";
+      // Sort chronologically
+      const sorted = [...tasks].sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+
+      sorted.forEach(t => {
+        const d = new Date(t.datetime).toLocaleDateString();
+        const hr = formatHour(t.hour);
+        const title = (t.title || "").replace(/"/g, '""'); // escape quotes
+        const wh = t.workingHours || "";
+        csv += `"${d}","${hr}","${title}","${wh}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "Scheduler_Export.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+}
+
 // ---------- Init ----------
-function renderCurrentView() {
+async function renderCurrentView() {
+  await initData();
   // default to daily on load
   renderDaily();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   setupViewSwitcher();
+  setupExport();
   renderCurrentView();
 });
