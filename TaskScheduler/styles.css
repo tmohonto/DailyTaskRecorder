@@ -1,0 +1,231 @@
+/* Modern Premium Task Scheduler Styles */
+/* Global resetting & sleek typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Very modern deep space background */
+  background: radial-gradient(circle at top left, hsl(220, 30%, 15%), hsl(260, 20%, 6%));
+  color: #f1f5f9;
+  /* Soft white/gray */
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.5rem 1rem;
+}
+
+/* Glassmorphism Header */
+.header {
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+.header h2 {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+/* Modern Tab Navigation */
+.view-switcher {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.2rem;
+  border-radius: 999px;
+  /* Pill shape */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
+}
+
+.view-switcher button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.view-switcher button:hover {
+  color: #f8fafc;
+}
+
+.view-switcher button.active {
+  background: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Main Container - Sleek Card */
+.main-content {
+  width: 100%;
+  max-width: 900px;
+  /* Glass card */
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Modern Table Layout */
+.daily-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.25rem;
+  /* Gap between rows */
+}
+
+.daily-table th {
+  padding: 0.25rem 0.5rem 0.5rem;
+  text-align: left;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-size: 0.70rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.daily-table td {
+  padding: 0.35rem 0.75rem;
+  background: rgba(15, 23, 42, 0.4);
+  /* Rounded corners for rows */
+}
+
+.daily-table tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  font-weight: 600;
+  color: #cbd5e1;
+  width: 100px;
+  font-size: 0.9rem;
+  /* Fixed width for hour column */
+}
+
+.daily-table tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.daily-table tr {
+  transition: transform 0.2s, background 0.2s;
+}
+
+.daily-table tr:hover td {
+  background: rgba(30, 41, 59, 0.8);
+}
+
+/* Invisible input for seamless editing */
+.daily-table td input[type="text"],
+.daily-table td input[type="number"] {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  padding: 0.3rem 0.5rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.daily-table td input[type="text"]:focus,
+.daily-table td input[type="text"]:hover,
+.daily-table td input[type="number"]:focus,
+.daily-table td input[type="number"]:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.daily-table td input[type="text"]::placeholder,
+.daily-table td input[type="number"]::placeholder {
+  color: #475569;
+  font-style: italic;
+}
+
+/* Reusable buttons (Months, Days) */
+.month-btn,
+.day-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  color: #cbd5e1;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.month-btn:hover,
+.day-btn:hover {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Section titles inside views */
+h2,
+h3 {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+/* Footer */
+.footer {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  .view-switcher {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .view-switcher button {
+    padding: 0.5rem 1rem;
+    flex: 1;
+  }
+}
